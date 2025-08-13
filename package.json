@@ -9,15 +9,16 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^11.0.0",
-    "@astrojs/vue": "^4.2.0",
+    "@astrojs/vue": "^5.1.0",
     "@nanostores/vue": "^1.0.1",
     "appwrite": "^14.0.0",
-    "astro": "^4.10.0",
+    "astro": "^5.12.9",
     "nanostores": "^1.0.1",
     "vue": "^3.4.0",
     "zod": "^4.0.17"
   },
   "devDependencies": {
+    "@astrojs/node": "^9.4.0",
     "@cloudflare/workers-types": "latest",
     "typescript": "^5.5.4"
   }

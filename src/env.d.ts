@@ -23,9 +23,25 @@ declare global {
           APPWRITE_FUNCTION_PUBLISH_ID: string; // deployed Appwrite Function id
         };
       };
+      session?: {
+        get: <T = string>(key: string) => T | undefined;
+        set: (key: string, value: string, opts?: { expires?: Date }) => void;
+        destroy: () => void;
+      };
     }
   }
 }
+
+// declare module 'astro:env/server' {
+//   interface Env {
+//     APPWRITE_ENDPOINT: string;
+//     APPWRITE_PROJECT_ID: string;
+//     SESSION_COOKIE_NAME?: string;
+//     COOKIE_DOMAIN?: string;
+//     CROSS_SITE?: 'true' | 'false';
+//   }
+// }
+
 
 export {};
 

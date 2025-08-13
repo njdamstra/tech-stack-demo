@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from '@nanostores/vue';
 import { session$, setSession } from '@/stores/sessionStore';
@@ -64,4 +64,4 @@ async function logout() {
 .title { margin: 0; }
 .actions { display: flex; gap: .5rem; }
 .btn { padding: .4rem .6rem; border: 1px solid #ddd; border-radius: .5rem; cursor: pointer; }
-</style>
+</style> -->

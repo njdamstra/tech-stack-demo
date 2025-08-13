@@ -1,15 +1,22 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async (ctx) => {
-  const { APPWRITE_ENDPOINT, APPWRITE_PROJECT, APPWRITE_DATABASE_ID, APPWRITE_COLLECTION_POSTS_ID } =
-    ctx.locals.runtime.env;
+  const runtimeEnv = (ctx.locals as any)?.runtime?.env as
+    | Record<string, string>
+    | undefined;
+  const env = (runtimeEnv ?? ((globalThis as any).process?.env ?? {})) as Record<string, string>;
+  const { APPWRITE_ENDPOINT, APPWRITE_PROJECT, APPWRITE_DATABASE_ID, APPWRITE_COLLECTION_POSTS_ID } = env;
 
   const auth = ctx.request.headers.get('authorization') ?? '';
   const jwt = auth.startsWith('Bearer ') ? auth.slice(7) : null;
-  if (!jwt) return new Response(JSON.stringify({ error: 'Missing JWT' }), { status: 401 });
+  if (!jwt) {
+    console.log('[posts] GET missing JWT');
+    return new Response(JSON.stringify({ error: 'Missing JWT' }), { status: 401 });
+  }
 
   const url = `${APPWRITE_ENDPOINT}/databases/${APPWRITE_DATABASE_ID}/collections/${APPWRITE_COLLECTION_POSTS_ID}/documents`;
 
+  console.log('[posts] GET list documents', { url });
   const res = await fetch(url, {
     headers: {
       'X-Appwrite-Project': APPWRITE_PROJECT,
@@ -18,24 +25,33 @@ export const GET: APIRoute = async (ctx) => {
     }
   });
 
-  return new Response(await res.text(), {
+  const text = await res.text();
+  console.log('[posts] GET status', res.status);
+  return new Response(text, {
     status: res.status,
     headers: { 'content-type': 'application/json' }
   });
 };
 
 export const POST: APIRoute = async (ctx) => {
-  const { APPWRITE_ENDPOINT, APPWRITE_PROJECT, APPWRITE_DATABASE_ID, APPWRITE_COLLECTION_POSTS_ID } =
-    ctx.locals.runtime.env;
+  const runtimeEnv = (ctx.locals as any)?.runtime?.env as
+    | Record<string, string>
+    | undefined;
+  const env = (runtimeEnv ?? ((globalThis as any).process?.env ?? {})) as Record<string, string>;
+  const { APPWRITE_ENDPOINT, APPWRITE_PROJECT, APPWRITE_DATABASE_ID, APPWRITE_COLLECTION_POSTS_ID } = env;
 
   const auth = ctx.request.headers.get('authorization') ?? '';
   const jwt = auth.startsWith('Bearer ') ? auth.slice(7) : null;
-  if (!jwt) return new Response(JSON.stringify({ error: 'Missing JWT' }), { status: 401 });
+  if (!jwt) {
+    console.log('[posts] POST missing JWT');
+    return new Response(JSON.stringify({ error: 'Missing JWT' }), { status: 401 });
+  }
 
   const body = await ctx.request.json().catch(() => ({}));
   const data = { title: String(body.title ?? 'Untitled') };
 
   // Fetch current user for per-document permissions
+  console.log('[posts] POST create -> fetch /account');
   const meRes = await fetch(`${APPWRITE_ENDPOINT}/account`, {
     headers: {
       'X-Appwrite-Project': APPWRITE_PROJECT,
@@ -49,6 +65,7 @@ export const POST: APIRoute = async (ctx) => {
   const me = await meRes.json();
   const userId = me?.$id as string | undefined;
 
+  console.log('[posts] POST create document for user', { userId });
   const res = await fetch(
     `${APPWRITE_ENDPOINT}/databases/${APPWRITE_DATABASE_ID}/collections/${APPWRITE_COLLECTION_POSTS_ID}/documents`,
     {
@@ -74,7 +91,9 @@ export const POST: APIRoute = async (ctx) => {
     }
   );
 
-  return new Response(await res.text(), {
+  const out = await res.text();
+  console.log('[posts] POST status', res.status);
+  return new Response(out, {
     status: res.status,
     headers: { 'content-type': 'application/json' }
   });
