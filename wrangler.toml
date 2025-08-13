@@ -1,0 +1,20 @@
+name = "my-stack-demo"
+main = "./dist/_worker.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+
+APPWRITE_PROJECT = "689a731200256462aba8"
+APPWRITE_PROJECT_NAME = "demo-project"
+APPWRITE_ENDPOINT = "https://nyc.cloud.appwrite.io/v1"
+        
+APPWRITE_DATABASE_ID = "689a76ad00055a2b2864"
+APPWRITE_COLLECTION_POSTS_ID = "689a76b6001dd946a0e1"
+
+# set secrets locally (do NOT commit):
+# wrangler secret put APPWRITE_API_KEY
+
+# ID of your deployed Appwrite Function for "publish"
+APPWRITE_FUNCTION_PUBLISH_ID = "689a784000272dd3ae44"
+APPWRITE_API_KEY = "standard_f98e2f58474c594a73fae04522aeb06aa736513b3d9266fbe1805b291603713410a75c3d0bb06fb55c35c7fa26eeb4fea2bd851bbc3bf00c8dd14f18a9f650d7fcab0d5f2b3446eaf64077f4be7ab5c7f57421aca1ee7401d62602cc991773507b1ef57ad1d46ab1fff5305a9464d7ff23dd4e8412f0e8b32ed5c23094b2f641"
+
